@@ -14,15 +14,20 @@ class Pizza:
             self.price = self.get_price()
 
     def get_size(self):
+        'Returns the pizza size'
         return self.size
 
     def get_type(self):
+        'Returns the pizza type'
         return self.p_type
 
     def get_toppings(self):
+        'Returns the list of pizza toppings'
         return self.toppings
 
     def get_price(self):
+        """Returns the pizza price and reads the combined pizza and toppings price 
+        from data file if price is not initialized"""
         if self.price is None:
             price = self.data['pizza'][self.p_type][self.size]
             for topping in self.toppings:
@@ -31,10 +36,13 @@ class Pizza:
         return self.price
 
     def manual_price_update(self, price):
+        'Manually updates and returns price for this pizza instance'
         self.price = price
         return self.get_price()
 
     def check_inputs(self, p_type, size, toppings):
+        """Returns boolean according to if there exists a valid pizza and toppings
+        under the given inputs"""
         try:
             self.data['pizza'][p_type]
             try:
@@ -54,6 +62,7 @@ class Pizza:
             return False
 
     def update(self, p_type, size, toppings):
+        """Updates pizza values according to parameters and checks validity"""
         if size == -1:
             size = self.size
         if p_type == -1:
