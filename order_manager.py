@@ -8,10 +8,10 @@ class OrderManager:
         self.orders = []
         self.num_orders = 1
 
-    def order(self, pizza_type, pizza_size, pizza_toppings, drinks):
+    def order(self, pizza_data, drinks):
         """Makes an order using the order class and the given parameters. This order is given an 
         order number and stored in the orders list. This order's order number is returned."""
-        order = Order(self.num_orders, pizza_type, pizza_size, pizza_toppings, drinks)
+        order = Order(self.num_orders, pizza_data, drinks)
         self.orders.append(order)
         self.num_orders += 1
         return self.num_orders - 1

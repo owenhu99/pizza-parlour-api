@@ -4,13 +4,13 @@ class Pizza:
     'Pizzas and their relevant data are defined here'
     price = None
 
-    def __init__(self, p_type, size, toppings):
+    def __init__(self, pizza_data):
         with open('data.json') as f:
             self.data = json.load(f)
-        if self.check_inputs(p_type, size, toppings):
-            self.size = size
-            self.p_type = p_type
-            self.toppings = toppings
+        if self.check_inputs(pizza_data):
+            self.p_type = pizza_data[0]
+            self.size = pizza_data[1]
+            self.toppings = pizza_data[2]
             self.price = self.get_price()
         else:
             raise Exception('Error: Invalid pizza attributes')
@@ -42,9 +42,10 @@ class Pizza:
         self.price = price
         return self.get_price()
 
-    def check_inputs(self, p_type, size, toppings):
+    def check_inputs(self, pizza_data):
         """Returns boolean according to if there exists a valid pizza 
         and toppings under the given inputs"""
+        p_type, size, toppings = pizza_data[0], pizza_data[1], pizza_data[2]
         try:
             self.data['pizza'][p_type]
             try:
@@ -63,15 +64,16 @@ class Pizza:
             print('Error: ' + p_type + ' pizza does not exist.')
             return False
 
-    def update(self, p_type, size, toppings):
-        """Updates pizza values according to parameters and checks validity"""
-        if size == -1:
-            size = self.size
+    def update(self, pizza_data):
+        """Updates pizza values according to pizza_data and checks validity"""
+        p_type, size, toppings = pizza_data[0], pizza_data[1], pizza_data[2]
         if p_type == -1:
             p_type = self.p_type
+        if size == -1:
+            size = self.size
         if toppings == -1:
             toppings = self.toppings
-        if self.check_inputs(p_type, size, toppings):
+        if self.check_inputs([p_type, size, toppings]):
             self.p_type = p_type
             self.size = size
             self.toppings = toppings
