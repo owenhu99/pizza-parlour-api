@@ -14,16 +14,19 @@ class Order:
             self.update_drinks(drinks)
 
     def update_pizzas(self, pizzas):
+        """Replaces the self.pizzas list with a new list from pizzas parameter."""
         self.pizzas = []
         for pizza in pizzas:
             self.add_pizza(pizza)
             
     def add_pizza(self, pizza_info):
+        """Creates a pizza object using pizza_info and appends this pizza to the self.pizzas list.
+        May throw exception if pizza_info is invalid"""
         pizza = Pizza(pizza_info)
         self.pizzas.append(pizza)
 
     def update_drinks(self, drinks):
-        """Replaces the self.drinks list with drinks"""
+        """Replaces the self.drinks list with a new list from drinks parameter"""
         self.drinks = []
         for drink in drinks:
             self.add_drink(drink)
