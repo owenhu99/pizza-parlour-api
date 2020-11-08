@@ -12,6 +12,8 @@ class Pizza:
             self.p_type = p_type
             self.toppings = toppings
             self.price = self.get_price()
+        else:
+            raise Exception('Error: Invalid pizza attributes')
 
     def get_size(self):
         'Returns the pizza size'
@@ -26,8 +28,8 @@ class Pizza:
         return self.toppings
 
     def get_price(self):
-        """Returns the pizza price and reads the combined pizza and toppings price 
-        from data file if price is not initialized"""
+        """Returns the pizza price and reads the combined pizza 
+        and toppings price from data file if price is not initialized"""
         if self.price is None:
             price = self.data['pizza'][self.p_type][self.size]
             for topping in self.toppings:
@@ -41,8 +43,8 @@ class Pizza:
         return self.get_price()
 
     def check_inputs(self, p_type, size, toppings):
-        """Returns boolean according to if there exists a valid pizza and toppings
-        under the given inputs"""
+        """Returns boolean according to if there exists a valid pizza 
+        and toppings under the given inputs"""
         try:
             self.data['pizza'][p_type]
             try:
@@ -73,4 +75,5 @@ class Pizza:
             self.p_type = p_type
             self.size = size
             self.toppings = toppings
-
+            return True
+        return False

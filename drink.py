@@ -11,6 +11,8 @@ class Drink:
             self.drink_type = drink_type
             self.size = size
             self.price = self.get_price()
+        else:
+            raise Exception('Error: Invalid drink attributes')
 
     def get_size(self):
         'Returns the drink size'
@@ -58,3 +60,5 @@ class Drink:
         if self.check_inputs(drink_type, size):
             self.drink_type = drink_type
             self.size = size
+            return True
+        return False
