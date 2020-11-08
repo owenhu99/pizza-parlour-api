@@ -7,6 +7,7 @@ class Pizza:
     def __init__(self, pizza_data):
         with open('data.json') as f:
             self.data = json.load(f)
+            
         if self.check_inputs(pizza_data):
             self.p_type = pizza_data[0]
             self.size = pizza_data[1]

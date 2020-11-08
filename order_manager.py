@@ -37,4 +37,3 @@ class OrderManager:
                 return order
         # order not found
         return False
-

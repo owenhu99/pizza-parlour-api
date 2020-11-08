@@ -7,6 +7,7 @@ class Drink:
     def __init__(self, drink_type, size):
         with open('data.json') as f:
             self.data = json.load(f)
+
         if self.check_inputs(drink_type, size):
             self.drink_type = drink_type
             self.size = size
