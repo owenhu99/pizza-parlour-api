@@ -34,7 +34,7 @@ class Order:
     def add_drink(self, drink_info):
         """Attempts to create a new drink using drink_info and adds 
         it to self.drinks. May Throw Exception if drink_info is invalid"""
-        drink = Drink(drink_info[0], drink_info[1])
+        drink = Drink(drink_info)
         self.drinks.append(drink)
 
     def get_order_number(self):
