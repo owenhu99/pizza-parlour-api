@@ -24,6 +24,7 @@ class Pizza(FoodItem):
         self.item_type = pizza_data[0]
         self.size = pizza_data[1]
         self.toppings = pizza_data[2]
+        item_type, size, toppings = pizza_data[0], pizza_data[1], pizza_data[2]
 
     def check_inputs(self, pizza_data):
         """Returns boolean according to if there exists a valid pizza 

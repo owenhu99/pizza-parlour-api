@@ -1,8 +1,11 @@
 import json
+import abc
 
 class FoodItem:
     'Food items (pizzas and drinks) and their relevant data are defined here'
     price = None
+    item_type = None
+    size = None
 
     def __init__(self, item_data):
         with open('data.json') as f:
@@ -26,3 +29,8 @@ class FoodItem:
         'Manually updates and returns price for this food item instance'
         self.price = price
         return self.get_price()
+
+    @abc.abstractmethod
+    def get_price(self):
+        print('Error: You should not reach here')
+
