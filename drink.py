@@ -23,26 +23,26 @@ class Drink(FoodItem):
         given inputs"""
         try:
             self.data['drink'][drink_data[0]]
-            try: 
-                self.data['drink'][drink_data[0]][drink_data[1]]
-                return True
-            except KeyError:
-                print('Error: Drink size does not exist for ' + item_type + '.')
-                return False
         except KeyError:
+            print('type: ' + drink_data[0])
             print('Error: Drink type does not exist.')
+            return False
+        try: 
+            self.data['drink'][drink_data[0]][drink_data[1]]
+            return True
+        except KeyError:
+            print('size: ' + drink_data[1])
+            print('Error: Drink size does not exist for ' + drink_data[1] + '.')
             return False
 
     def update(self, drink_data):
         """Updates drink type and/or size according to parameters 
         and checks validity"""
-        item_type, size = drink_data[0], drink_data[1]
-        if item_type == -1:
-            item_type = self.item_type
-        if size == -1:
-            size = self.size
-        if self.check_inputs(item_type, size):
-            self.item_type = item_type
-            self.size = size
+        if drink_data[0] == -1:
+            drink_data[0] = self.item_type
+        if drink_data[1] == -1:
+            drink_data[1] = self.size
+        if self.check_inputs(drink_data):
+            self.set_inputs(drink_data)
             return True
         return False

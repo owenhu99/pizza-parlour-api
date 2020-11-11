@@ -22,8 +22,8 @@ class Pizza(FoodItem):
         """Sets the pizza variables to the pizza_data.
         Only call this if you have already checked pizza_data."""
         self.item_type = pizza_data[0]
-        self.size = pizza_data[0]
-        self.toppings = pizza_data[0]
+        self.size = pizza_data[1]
+        self.toppings = pizza_data[2]
 
     def check_inputs(self, pizza_data):
         """Returns boolean according to if there exists a valid pizza 
@@ -49,16 +49,13 @@ class Pizza(FoodItem):
 
     def update(self, pizza_data):
         """Updates pizza values according to pizza_data and checks validity"""
-        item_type, size, toppings = pizza_data[0], pizza_data[1], pizza_data[2]
-        if item_type == -1:
-            item_type = self.item_type
-        if size == -1:
-            size = self.size
-        if toppings == -1:
-            toppings = self.toppings
-        if self.check_inputs([item_type, size, toppings]):
-            self.item_type = item_type
-            self.size = size
-            self.toppings = toppings
+        if pizza_data[0] == -1:
+            pizza_data[0] = self.item_type
+        if pizza_data[1] == -1:
+            pizza_data[1] = self.size
+        if pizza_data[2] == -1:
+            pizza_data[2] = self.toppings
+        if self.check_inputs(pizza_data):
+            self.set_inputs(pizza_data)
             return True
         return False
