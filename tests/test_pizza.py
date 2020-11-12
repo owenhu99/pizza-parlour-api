@@ -74,3 +74,12 @@ def manual_price_update():
     rand2 = random.randint(1,100)
     price2 = pizza.manual_price_update(rand2)
     assert price2 == rand2
+
+def test_get_dict():
+    pizza = Pizza(['vegetarian', 'medium', ['chicken', 'beef']])
+    pizza_dict = pizza.get_dict()
+    assert "type" in pizza_dict
+    assert "size" in pizza_dict
+    assert "toppings" in pizza_dict
+    assert "price" in pizza_dict and isinstance(pizza_dict["price"], int)
+    

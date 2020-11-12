@@ -5,7 +5,7 @@ class Drink(FoodItem):
     'Drinks and their relevant data are defined here'
 
     def get_price(self):
-        """Returns the drink price and reads price from data file if price 
+        """Returns the drink price and reads price from data file if price
         is not initialized"""
         if self.price is None:
             return self.data['drink'][self.item_type][self.size]
@@ -19,7 +19,7 @@ class Drink(FoodItem):
         self.size = drink_data[1]
 
     def check_inputs(self, drink_data):
-        """Returns boolean according to if there exists a valid drink under the 
+        """Returns boolean according to if there exists a valid drink under the
         given inputs"""
         try:
             self.data['drink'][drink_data[0]]
@@ -27,7 +27,7 @@ class Drink(FoodItem):
             print('type: ' + drink_data[0])
             print('Error: Drink type does not exist.')
             return False
-        try: 
+        try:
             self.data['drink'][drink_data[0]][drink_data[1]]
             return True
         except KeyError:
@@ -36,7 +36,7 @@ class Drink(FoodItem):
             return False
 
     def update(self, drink_data):
-        """Updates drink type and/or size according to parameters 
+        """Updates drink type and/or size according to parameters
         and checks validity"""
         if drink_data[0] == -1:
             drink_data[0] = self.item_type
@@ -46,3 +46,11 @@ class Drink(FoodItem):
             self.set_inputs(drink_data)
             return True
         return False
+
+    def get_dict(self):
+        """Return drink data in dictionary format"""
+        return {
+            "type": self.item_type,
+            "size": self.size,
+            "price": self.price
+        }

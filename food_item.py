@@ -41,3 +41,7 @@ class FoodItem:
     @abc.abstractmethod
     def check_inputs(self, item_data):
         """Checks input: to be implemented"""
+
+    @abc.abstractmethod
+    def get_dict(self):
+        """Returns data as dictionary: to be implemented"""

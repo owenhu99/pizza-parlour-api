@@ -9,7 +9,7 @@ class Pizza(FoodItem):
         return self.toppings
 
     def get_price(self):
-        """Returns the pizza price and reads the combined pizza 
+        """Returns the pizza price and reads the combined pizza
         and toppings price from data file if price is not initialized"""
         if self.price is None:
             price = self.data['pizza'][self.item_type][self.size]
@@ -24,10 +24,9 @@ class Pizza(FoodItem):
         self.item_type = pizza_data[0]
         self.size = pizza_data[1]
         self.toppings = pizza_data[2]
-        item_type, size, toppings = pizza_data[0], pizza_data[1], pizza_data[2]
 
     def check_inputs(self, pizza_data):
-        """Returns boolean according to if there exists a valid pizza 
+        """Returns boolean according to if there exists a valid pizza
         and toppings under the given inputs"""
         item_type, size, toppings = pizza_data[0], pizza_data[1], pizza_data[2]
         try:
@@ -60,3 +59,12 @@ class Pizza(FoodItem):
             self.set_inputs(pizza_data)
             return True
         return False
+
+    def get_dict(self):
+        """Return pizza data in dictionary format"""
+        return {
+            "type": self.item_type,
+            "size": self.size,
+            "toppings": self.toppings,
+            "price": self.get_price()
+        }

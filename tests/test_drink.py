@@ -55,3 +55,9 @@ def test_check_inputs():
     assert not drink.check_inputs(['invalid', 'small'])
     assert not drink.check_inputs(['coke', 'invalid'])
 
+def test_get_dict():
+    drink = Drink(['coke', 'small'])
+    drink_dict = drink.get_dict()
+    assert "type" in drink_dict
+    assert "size" in drink_dict
+    assert "price" in drink_dict and isinstance(drink_dict["price"], int)
