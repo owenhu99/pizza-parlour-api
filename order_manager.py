@@ -6,6 +6,8 @@ class OrderManager:
 
     def __init__(self):
         self.orders = []
+        self.deliveries = []
+        self.pickups = []
         self.num_orders = 1
 
     def order(self, pizza_data, drinks):
@@ -23,17 +25,50 @@ class OrderManager:
             if order.get_order_number() == order_num:
                 self.orders.remove(order)
                 return True
+        for order in self.deliveries:
+            if order.get_order_number() == order_num:
+                self.deliveries.remove(order)
+                return True
+        for order in self.pickups:
+            if order.get_order_number() == order_num:
+                self.deliveries.remove(order)
+                return True
         # order not found
         return False
 
+    def change_to_delivery(self, order_json):
+        """Set delivery info
+        Returns False if order is not found, True otherwise"""
+        order_number = order_json["order_number"]
+        order = self.get_order(order_number)
+        if not order:
+            return False
+        order.update_delivery_info(order_json)
+        return True
+
+    def change_to_pickup(self, order_num):
+        """Change order method to pickup
+        Returns False if order is not found, True if found"""
+        order = self.get_order(order_num)
+        if not order:
+            return False
+        order.set_pickup(True)
+        return True
+
     def get_num_active_orders(self):
         """Returns the number of orders currently in the system and orders list"""
-        return len(self.orders)
+        return len(self.orders) + len(self.pickups) + len(self.deliveries)
 
     def get_order(self, order_num):
         """Returns the order object corresponding with the given order number.
         Returns False if such an order does not exist in the orders list."""
         for order in self.orders:
+            if order.get_order_number() == order_num:
+                return order
+        for order in self.deliveries:
+            if order.get_order_number() == order_num:
+                return order
+        for order in self.pickups:
             if order.get_order_number() == order_num:
                 return order
         # order not found

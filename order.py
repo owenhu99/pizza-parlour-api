@@ -12,13 +12,30 @@ class Order:
 
         if drinks is not None:
             self.update_drinks(drinks)
+        
+        self.delivery_info = {}
+        self.pickup = False
 
+    def get_pickup(self):
+        """Return whether the order is a pickup or not"""
+        return self.pickup
+
+    def set_pickup(self, pickup):
+        """Change pickup method"""
+        self.pickup = pickup
+
+    def update_delivery_info(self, delivery_json):
+        """Update order's delivery option
+        Throws exception if value of option is invalid"""
+        self.delivery_info = delivery_json
+        self.set_pickup(False)
+        
     def update_pizzas(self, pizzas):
         """Replaces the self.pizzas list with a new list from pizzas parameter."""
         self.pizzas = []
         for pizza in pizzas:
             self.add_pizza(pizza)
-            
+      
     def add_pizza(self, pizza_info):
         """Creates a pizza object using pizza_info and appends this pizza to the self.pizzas list.
         May throw exception if pizza_info is invalid"""
@@ -57,3 +74,7 @@ class Order:
         for drink in self.drinks:
             price += drink.get_price()
         return price
+    
+    def get_delivery_info(self):
+        """Return delivery_info dictionary"""
+        return self.delivery_info
