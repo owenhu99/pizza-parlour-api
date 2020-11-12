@@ -18,10 +18,11 @@ class OrderManager:
 
     def cancel_order(self, order_num):
         """Cancels the order with the given order number by removing it from the orders list.
-        Returns the canceled order or False if the order does not exist."""
+        Returns True if order exists or False if it does not exist."""
         for order in self.orders:
             if order.get_order_number() == order_num:
-                return self.orders.remove(order)
+                self.orders.remove(order)
+                return True
         # order not found
         return False
 
