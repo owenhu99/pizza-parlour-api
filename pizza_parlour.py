@@ -36,7 +36,9 @@ def api_get_order(order_number):
             'order_number': order_number,
             'pizzas': [pizza.get_dict() for pizza in order.get_pizzas()],
             'drinks': [drink.get_dict() for drink in order.get_drinks()],
-            'total': order.get_price()
+            'total': order.get_price(),
+            'pickup': order.get_pickup(),
+            "delivery_info": order.get_delivery_info()
         })
     print("Error: No order found with the order number: " + str(order_number))
     return no_content_found()
@@ -46,7 +48,7 @@ def api_cancel_order(order_number):
     """Cancel order by order number"""
     if orderManager.cancel_order(order_number):
         return jsonify({'cancelled_order': order_number})
-    return no_content_found()   
+    return no_content_found()
 
 @app.route('/v1/orders', methods=['POST'])
 def api_create_order():
@@ -81,6 +83,40 @@ def api_create_order():
         ])
     order_num = orderManager.order(pizzas, drinks)
     return jsonify({'order_number': order_num})
+
+@app.route('/v1/orders/pickup', methods=['POST'])
+def api_pickup():
+    """Change order to be picked up
+    json format:
+    {
+        "order_number": "<system order number>"
+    }
+    """
+    if not request.json or "order_number" not in request.json:
+        return bad_request(400)
+    if orderManager.change_to_pickup(request.json["order_number"]):
+        return jsonify({})
+    return no_content_found()
+
+@app.route('/v1/orders/delivery', methods=['POST'])
+def api_delivery():
+    """Change order to be delivered
+    json format:
+    {
+        "order_number": "<system order number>",
+        "address": "<address>",
+        "details": "<order details>",
+        "delivery_number": "<partner order number>",
+        "platform": "<delivery platform>"
+    }
+    """
+    keys = ["order_number", "address", "details", "delivery_number", "platform"]
+    if (not request.json) or (not all(key in request.json for key in keys)) \
+    or (request.json["platform"] not in ["foodora", "ubereats", "in-house"]):
+        return bad_request(400)
+    if orderManager.change_to_delivery(request.json):
+        return jsonify({})
+    return no_content_found()
 
 @app.route('/v1/resources/menu/all', methods=['GET'])
 def api_all():
