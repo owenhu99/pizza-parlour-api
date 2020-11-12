@@ -33,14 +33,11 @@ class FoodItem:
     @abc.abstractmethod
     def get_price(self):
         """Gets price of item: to be implemented"""
-        print('Error: You should not reach here')
 
     @abc.abstractmethod
     def set_inputs(self, item_data):
         """Sets input: to be implemented"""
-        print('Error: You should not reach here')
 
     @abc.abstractmethod
     def check_inputs(self, item_data):
         """Checks input: to be implemented"""
-        print('Error: You should not reach here')
