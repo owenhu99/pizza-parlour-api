@@ -3,14 +3,14 @@ import abc
 
 class FoodItem:
     'Food items (pizzas and drinks) and their relevant data are defined here'
+    __metaclass__ = abc.ABCMeta
     price = None
     item_type = None
     size = None
 
     def __init__(self, item_data):
-        with open('data.json') as f:
-            self.data = json.load(f)
-            
+        with open('data.json') as file_menu:
+            self.data = json.load(file_menu)
         if self.check_inputs(item_data):
             self.set_inputs(item_data)
             self.price = self.get_price()
@@ -32,5 +32,15 @@ class FoodItem:
 
     @abc.abstractmethod
     def get_price(self):
+        """Gets price of item: to be implemented"""
         print('Error: You should not reach here')
 
+    @abc.abstractmethod
+    def set_inputs(self, item_data):
+        """Sets input: to be implemented"""
+        print('Error: You should not reach here')
+
+    @abc.abstractmethod
+    def check_inputs(self, item_data):
+        """Checks input: to be implemented"""
+        print('Error: You should not reach here')
