@@ -41,6 +41,13 @@ def api_get_order(order_number):
     print("Error: No order found with the order number: " + str(order_number))
     return no_content_found()
 
+@app.route('/v1/orders/<int:order_number>', methods=['DELETE'])
+def api_cancel_order(order_number):
+    """Cancel order by order number"""
+    if orderManager.cancel_order(order_number):
+        return jsonify({'cancelled_order': order_number})
+    return no_content_found()   
+
 @app.route('/v1/orders', methods=['POST'])
 def api_create_order():
     """Create an order
