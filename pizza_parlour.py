@@ -1,7 +1,6 @@
 import json
 from flask import Flask, request, jsonify
 from order_manager import OrderManager
-from order import Order
 
 app = Flask("Assignment 2")
 orderManager = OrderManager()
@@ -43,6 +42,29 @@ def api_get_order(order_number):
     print("Error: No order found with the order number: " + str(order_number))
     return no_content_found()
 
+@app.route('/v1/orders/<int:order_number>', methods=['PUT'])
+def api_update_order(order_number):
+    """Update order by order number
+
+    json must contain key "pizzas" or "drinks",
+    "pizzas" must be a json array with the format:
+    {"type": str, "size": str, "toppings": comma-separated-str}
+    "drinks" must be a json array with the format:
+    {"type": str, "size": str}
+
+    The value of "pizzas" and "drinks" OVERWRITES those of the order
+    """
+    order = orderManager.get_order(order_number)
+    if not order:
+        return no_content_found()
+    if not request.json or ("pizzas" not in request.json and "drinks" not in request.json):
+        return bad_request(400)
+    if "pizzas" in request.json:
+        order.update_pizzas(_parse_dict_to_array(request.json["pizzas"]))
+    if "drinks" in request.json:
+        order.update_drinks(_parse_dict_to_array(request.json["drinks"]))
+    return jsonify({})
+
 @app.route('/v1/orders/<int:order_number>', methods=['DELETE'])
 def api_cancel_order(order_number):
     """Cancel order by order number"""
@@ -69,18 +91,10 @@ def api_create_order():
     """
     if not request.json or not 'pizzas' in request.json or not 'drinks' in request.json:
         return bad_request(400)
-    pizzas, drinks = [], []
-    for pizza in request.json['pizzas']:
-        pizzas.append([
-            pizza['type'],
-            pizza['size'],
-            [x.strip() for x in pizza['toppings'].split()]
-        ])
-    for drink in request.json['drinks']:
-        drinks.append([
-            drink['type'],
-            drink['size']
-        ])
+    pizzas = _parse_dict_to_array(request.json["pizzas"])
+    drinks = _parse_dict_to_array(request.json["drinks"])
+    if KeyError in (pizzas, drinks):
+        return bad_request(400)
     order_num = orderManager.order(pizzas, drinks)
     return jsonify({'order_number': order_num})
 
@@ -148,6 +162,37 @@ def api_item():
         return page_not_found(404)
 
     return jsonify(price=result)
+
+def _parse_dict_to_array(item_list):
+    """Helper function that changes a list of dicts to a list of arrays
+    Input:
+    [{"type": type_str, "size": size_str, "toppings": toppings_str}, {...}, ...]
+    Output:
+    [[type_str, size_str, [topping1, topping2, ...]], [...], ...]
+
+    Input must have keys "type" and "size'
+    "toppings" must be comma separated (whitespace ok) and is optional
+    """
+    out = []
+    if len(item_list) == 0:
+        return out
+    if "type" not in item_list[0] or "size" not in item_list[0]:
+        return KeyError
+    if "toppings" in item_list[0]:
+        # for pizza
+        for pizza in item_list:
+            out.append([
+                pizza['type'],
+                pizza['size'],
+                [x.strip() for x in pizza['toppings'].split(',') if x != '']
+            ])
+    else:
+        for drink in item_list:
+            out.append([
+                drink['type'],
+                drink['size']
+            ])
+    return out
 
 if __name__ == "__main__":
     app.run()
