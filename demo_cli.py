@@ -29,6 +29,54 @@ def _print_result(result, request_type):
         pp.pprint(result["response"])
     print("")
 
+def _ask_for_pizza():
+    pizza, size, toppings = None, None, None
+    print("-----------------------------------------------")
+    print("Available: pepperoni, margherita, vegetarian, neapolitan")
+    print("Enter a pizza: ", end='')
+    while True:
+        pizza = input()
+        if pizza in VALID_PIZZAS:
+            break
+        print("Please enter a valid pizza type: ", end='')
+    print("-----------------------------------------------")
+    print("Available: small, medium")
+    print("Enter a size: ", end='')
+    while True:
+        size = input()
+        if size in VALID_SIZES:
+            break
+        print("Please enter a valid size: ", end='')
+    print("-----------------------------------------------")
+    print("Available: olives, tomatoes, mushrooms, jalapenos, chicken, beef, pepperoni")
+    print("Enter zero or more toppings (comma separated)\n: ", end='')
+    while True:
+        toppings = input()
+        if set([x.strip() for x in toppings.split(",")]).issubset(VALID_TOPPINGS):
+            break
+        print("Please enter a valid topping (comma separated)\n: ", end='')
+    return pizza, size, toppings
+
+def _ask_for_drink():
+    drink, size = None, None
+    print("-----------------------------------------------")
+    print("Available: coke, diet coke, coke zero, pepsi, diet pepsi, dr pepper, water, juice")
+    print("Enter a drink: ", end='')
+    while True:
+        drink = input()
+        if drink in VALID_DRINKS:
+            break
+        print("Please enter a valid drink: ", end='')
+    print("-----------------------------------------------")
+    print("Available: small, medium")
+    print("Enter a size: ", end='')
+    while True:
+        size = input()
+        if size in VALID_SIZES:
+            break
+        print("Please enter a valid size: ", end='')
+    return drink, size
+
 def create_order():
     order = {"pizzas": [], "drinks": []}
     print("-----------------------------------------------")
@@ -39,50 +87,10 @@ def create_order():
         if option == "e":
             return
         if option == "pizza":
-            pizza, size, toppings = None, None, None
-            print("-----------------------------------------------")
-            print("Available: pepperoni, margherita, vegetarian, neapolitan")
-            print("Enter a pizza: ", end='')
-            while True:
-                pizza = input()
-                if pizza in VALID_PIZZAS:
-                    break
-                print("Please enter a valid pizza type: ", end='')
-            print("-----------------------------------------------")
-            print("Available: small, medium")
-            print("Enter a size: ", end='')
-            while True:
-                size = input()
-                if size in VALID_SIZES:
-                    break
-                print("Please enter a valid size: ", end='')
-            print("-----------------------------------------------")
-            print("Available: olives, tomatoes, mushrooms, jalapenos, chicken, beef, pepperoni")
-            print("Enter zero or more toppings (comma separated)\n: ", end='')
-            while True:
-                toppings = input()
-                if set([x.strip() for x in toppings.split(",")]).issubset(VALID_TOPPINGS):
-                    break
-                print("Please enter a valid topping (comma separated)\n: ", end='')
+            pizza, size, toppings = _ask_for_pizza()
             order["pizzas"].append({"type": pizza, "size": size, "toppings": toppings})
         elif option == "drink":
-            drink, size = None, None
-            print("-----------------------------------------------")
-            print("Available: coke, diet coke, coke zero, pepsi, diet pepsi, dr pepper, water, juice")
-            print("Enter a drink: ", end='')
-            while True:
-                drink = input()
-                if drink in VALID_DRINKS:
-                    break
-                print("Please enter a valid drink: ", end='')
-            print("-----------------------------------------------")
-            print("Available: small, medium")
-            print("Enter a size: ", end='')
-            while True:
-                size = input()
-                if size in VALID_SIZES:
-                    break
-                print("Please enter a valid size: ", end='')
+            drink, size = _ask_for_drink()
             order["drinks"].append({"type": drink, "size": size})
         elif option == "end":
             break
@@ -102,7 +110,29 @@ def read_order():
     _print_result(Helper.get_order(order_num), "GET")
 
 def update_order():
-    return
+    order_num, order = None, {"pizzas": [], "drinks": []}
+    print("-----------------------------------------------")
+    print("Enter an order number to update (e to exit): ", end='')
+    while True:
+        order_num = input()
+        if order_num == "e":
+            return
+        if order_num.isdigit():
+            break
+        print("Enter a valid number: ", end='')
+    while True:
+        print("Enter 'pizza' or 'drink' to replace current order, 'end' to finish (e to exit)"
+            + "\n: ", end='')
+        option = input()
+        if option == "pizza":
+            pizza, size, toppings = _ask_for_pizza()
+            order["pizzas"].append({"type": pizza, "size": size, "toppings": toppings})
+        elif option == "drink":
+            drink, size = _ask_for_drink()
+            order["drinks"].append({"type": drink, "size": size})
+        elif option == "end":
+            break
+    _print_result(Helper.update_order(order, order_num), "PUT")
 
 def delete_order():
     order_num = None
@@ -118,16 +148,95 @@ def delete_order():
     _print_result(Helper.delete_order(order_num), "DELETE")
 
 def pickup_order():
-    return
+    order_num = None
+    print("-----------------------------------------------")
+    print("Enter an order number to change to pickup (e to exit)"
+        + "\n: ", end='')
+    while True:
+        order_num = input()
+        if order_num == "e":
+            return
+        if order_num.isdigit():
+            break
+        print("Enter a valid number: ", end='')
+    _print_result(Helper.pickup_order(int(order_num)), "POST")
+
+def _get_delivery_info():
+    print("Enter an address: ", end='')
+    address = input()
+    while address == "":
+        print("Please enter an address: ", end='')
+        address = input()
+    print("Enter order instructions: ", end='')
+    order_details = input()
+    while order_details == "":
+        print("Please enter order instructions: ", end='')
+        order_details = input()
+    print("Enter a delivery number: ", end='')
+    delivery_number = input()
+    while delivery_number == "":
+        print("Please enter a delivery_number: ", end='')
+        delivery_number = input()
+    return address, order_details, delivery_number
 
 def deliver_inhouse():
-    return
+    order_num = None
+    print("-----------------------------------------------")
+    print("Enter an order number to be delivered inhouse (e to exit)"
+        + "\n: ", end='')
+    while True:
+        order_num = input()
+        if order_num == "e":
+            return
+        if order_num.isdigit():
+            break
+        print("Enter a valid number: ", end='')
+    address, order_details, delivery_number = _get_delivery_info()
+    order = {
+        "order_number": int(order_num),
+        "address": address,
+        "details": order_details,
+        "delivery_number": delivery_number
+    }
+    _print_result(Helper.deliver_order_json(order, "inhouse"), "POST")
 
 def deliver_ubereats():
-    return
+    order_num = None
+    print("-----------------------------------------------")
+    print("Enter an order number to be delivered UberEats (e to exit)"
+        + "\n: ", end='')
+    while True:
+        order_num = input()
+        if order_num == "e":
+            return
+        if order_num.isdigit():
+            break
+        print("Enter a valid number: ", end='')
+    address, order_details, delivery_number = _get_delivery_info()
+    order = {
+        "order_number": int(order_num),
+        "address": address,
+        "details": order_details,
+        "delivery_number": delivery_number
+    }
+    _print_result(Helper.deliver_order_json(order, "ubereats"), "POST")
 
 def deliver_foodora():
-    return
+    order_num = None
+    print("-----------------------------------------------")
+    print("Enter an order number to be delivered Foodora (e to exit)"
+        + "\n: ", end='')
+    while True:
+        order_num = input()
+        if order_num == "e":
+            return
+        if order_num.isdigit():
+            break
+        print("Enter a valid number: ", end='')
+    address, order_details, delivery_number = _get_delivery_info()
+    order = "order_number,address,details,delivery_number\n" + \
+        "{0},{1},{2},{3}".format(order_num, address, order_details, delivery_number)
+    _print_result(Helper.deliver_order_csv(order), "POST")
 
 def get_menu():
     _print_result(Helper.get_menu(), "GET")
