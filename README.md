@@ -17,6 +17,12 @@ Install required package `pip install coverage pytest`
 
 Run unit tests with coverage by running `coverage run -m pytest && coverage report -m`
 
+# Demo CLI
+
+Install required package `pip install requests`
+
+Run demo CLI by running `python3 demo_cli.py`
+
 # API Documentation
 
 PizzaParlour API offers services to create and manage pizza orders and get various resources.
