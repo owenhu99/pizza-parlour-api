@@ -44,6 +44,27 @@ def test_order():
     except:
         assert True
 
+def test_add_pizza():
+    order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
+    pizza_info = ['vegetarian', 'small', ['beef', 'chicken']]
+    order.add_pizza(pizza_info)
+    assert order.get_pizzas()[0].get_type() == 'pepperoni'
+    assert order.get_pizzas()[0].get_size() == 'medium'
+    assert order.get_pizzas()[0].get_toppings() == ['olives', 'chicken']
+
+    assert order.get_pizzas()[1].get_type() == 'vegetarian'
+    assert order.get_pizzas()[1].get_size() == 'small'
+    assert order.get_pizzas()[1].get_toppings() == ['beef', 'chicken']
+
+    pizza_info = ['pepperoni', 'small', ['beef']]
+    order.add_pizza(pizza_info)
+    assert order.get_pizzas()[2].get_type() == 'pepperoni'
+    assert order.get_pizzas()[2].get_size() == 'small'
+    assert order.get_pizzas()[2].get_toppings() == ['beef']
+
+
+
+
 def test_update_pizzas():
     order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
     order.update_pizzas([['vegetarian', 'small', ['beef']]])
@@ -71,6 +92,21 @@ def test_update_drinks():
     assert order.get_drinks()[0].get_size() == 'small'
     assert order.get_drinks()[1].get_type() == 'pepsi'
     assert order.get_drinks()[1].get_size() == 'medium'
+
+def test_get_pickup():
+    order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
+    assert not order.get_pickup()
+    order.pickup = False
+    assert not order.get_pickup()
+    order.pickup = True
+    assert order.get_pickup()
+
+def test_set_pickup():
+    order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
+    order.set_pickup(True)
+    assert order.pickup
+    order.set_pickup(False)
+    assert not order.pickup
 
 def test_get_order_number():
     order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
