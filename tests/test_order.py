@@ -1,4 +1,4 @@
-from order import Order
+from src.order import Order
 import json
 
 def test_order():

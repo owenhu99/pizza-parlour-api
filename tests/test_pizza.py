@@ -1,4 +1,4 @@
-from pizza import Pizza
+from src.pizza import Pizza
 import random
 import os.path
 import json

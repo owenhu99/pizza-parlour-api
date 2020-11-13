@@ -1,5 +1,5 @@
 from pizza_parlour import app
-from order import Order
+
 
 def test_pizza():
     """Test index page routing"""

@@ -1,4 +1,4 @@
-from food_item import FoodItem
+from src.food_item import FoodItem
 
 class Drink(FoodItem):
     'Drinks and their relevant data are defined here'

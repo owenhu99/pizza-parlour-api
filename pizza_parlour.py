@@ -1,6 +1,6 @@
 import json
 from flask import Flask, request, jsonify
-from order_manager import OrderManager
+from src.order_manager import OrderManager
 
 app = Flask("Assignment 2")
 orderManager = OrderManager()

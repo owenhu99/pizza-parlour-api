@@ -1,5 +1,5 @@
-from pizza import Pizza
-from drink import Drink
+from src.pizza import Pizza
+from src.drink import Drink
 
 class Order:
     'All orders will be defined from this class'

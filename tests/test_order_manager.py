@@ -1,4 +1,4 @@
-from order_manager import OrderManager
+from src.order_manager import OrderManager
 
 def test_order_manager():
     manager = OrderManager()
