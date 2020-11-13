@@ -8,8 +8,7 @@ class Drink(FoodItem):
         is not initialized"""
         if self.price is None:
             return self.data['drink'][self.item_type][self.size]
-        else:
-            return self.price
+        return self.price
 
     def set_inputs(self, item_data):
         """Sets the drink variables to the drink_data.
@@ -28,8 +27,7 @@ class Drink(FoodItem):
             print('size: ' + item_data[1])
             print('Error: Drink size does not exist for ' + item_data[1] + '.')
             return False
-        else:
-            return True
+        return True
 
     def update(self, drink_data):
         """Updates drink type and/or size according to parameters
