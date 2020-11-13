@@ -40,6 +40,15 @@ def test_update():
     pizza.update([-1, -1, ['olives']])
     assert pizza.get_toppings() == ['olives']
 
+    pizza = Pizza(['pepperoni', 'small', ['chicken', 'olives']])
+    assert not pizza.update([-1, 'invalid', -1])
+
+    pizza = Pizza(['vegetarian', 'medium', ['beef', 'olives']])
+    assert not pizza.update(['invalid', -1, -1])
+
+    pizza = Pizza(['vegetarian', 'small', ['chicken', 'beef']])
+    assert not pizza.update([-1, -1, 'invalid'])
+
 def test_get_price():
     with open(os.path.dirname(__file__) + '/../data.json')  as f:
         data = json.load(f)
@@ -61,9 +70,9 @@ def test_check_inputs():
     assert pizza.check_inputs(['vegetarian', 'small', ['chicken']]) == True
     assert pizza.check_inputs(['pepperoni', 'medium', []]) == True
     assert pizza.check_inputs(['invalid', 'medium', ['olives', 'beef']]) == False
-    assert pizza.check_inputs(['invalid', 'invalid', ['olives', 'beef']]) == False
-    assert pizza.check_inputs(['invalid', 'medium', ['invalid', 'beef']]) == False
-    assert pizza.check_inputs(['invalid', 'medium', 'invalid']) == False
+    assert pizza.check_inputs(['pepperoni', 'invalid', ['olives', 'beef']]) == False
+    assert pizza.check_inputs(['pepperoni', 'medium', ['invalid', 'beef']]) == False
+    assert pizza.check_inputs(['pepperoni', 'medium', 'invalid']) == False
 
 def manual_price_update():
     pizza = Pizza(['vegetarian', 'medium', ['chicken', 'beef']])
