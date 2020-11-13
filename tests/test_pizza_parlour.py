@@ -1,31 +1,55 @@
 from pizza_parlour import app
 from order import Order
-import random
 
 def test_pizza():
-    response = app.test_client().get('/pizza')
+    """Test index page routing"""
+    response = app.test_client().get('/')
 
     assert response.status_code == 200
-    assert response.data == b'Welcome to Pizza Planet!'
+    assert response.data == b'Welcome to the Pizza Parlour'
 
+def test_menu():
+    """Test full menu GET request"""
+    response = app.test_client().get('/v1/resources/menu/all')
 
-def test_order():
-    first_rand = random.randint(1, 100)
-    first_order = Order(first_rand)
+    assert response.status_code == 200
+    assert response.content_type == 'application/json'
 
-    assert first_order.get_pizza() is False
-    assert first_order.get_order_number() == first_rand
-    assert first_order.get_drinks() == []
+def test_item():
+    """Test specific item GET request"""
+    # 404 reponses
+    response = app.test_client().get('/v1/resources/menu?')
+    assert response.status_code == 404
 
-def test_update_pizza():
-    assert True
+    response = app.test_client().get('/v1/resources/menu?itype=pizza')
+    assert response.status_code == 404
 
-def test_addDrink():
-    assert True
+    response = app.test_client().get('/v1/resources/menu?itype=pizza&item=pepperoni')
+    assert response.status_code == 404
 
-def test_updateDrinks():
-    assert True
+    response = app.test_client().get('/v1/resources/menu?item=pepperoni')
+    assert response.status_code == 404
 
-def test_ready():
-    assert True
+    # 204 responses
+    response = app.test_client().get('/v1/resources/menu?item=p&itype=pizza&size=small')
+    assert response.status_code == 204
 
+    response = app.test_client().get('/v1/resources/menu?item=pepperoni&itype=p&size=small')
+    assert response.status_code == 204
+
+    response = app.test_client().get('/v1/resources/menu?item=pepperoni&itype=pizza&size=s')
+    assert response.status_code == 204
+
+    response = app.test_client().get('/v1/resources/menu?itype=topping&item=b')
+    assert response.status_code == 204
+
+    # 200 responses
+    response = app.test_client().get('/v1/resources/menu?itype=topping&item=beef')
+    assert response.status_code == 200
+    assert response.content_type == 'application/json'
+    assert isinstance((response.json)['price'], int)
+
+    response = app.test_client().get('/v1/resources/menu?itype=pizza&item=pepperoni&size=small')
+    assert response.status_code == 200
+    assert response.content_type == 'application/json'
+    assert isinstance((response.json)['price'], int)

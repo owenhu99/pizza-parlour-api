@@ -1,0 +1,27 @@
+{
+  "pizza": {
+    "pepperoni": {"small": 10, "medium": 15},
+    "margherita": {"small": 9, "medium": 14},
+    "vegetarian": {"small": 8, "medium": 13},
+    "neapolitan": {"small": 10, "medium": 15}
+  },
+  "drink": {
+   "coke": {"small": 2, "medium": 2.50}, 
+    "diet coke": {"small": 2, "medium": 2.50}, 
+    "coke zero": {"small": 2, "medium": 2.50},
+    "pepsi": {"small": 2, "medium": 2.50},
+    "diet pepsi": {"small": 2, "medium": 2.50},
+    "dr pepper": {"small": 2, "medium": 2.50},
+    "water": {"small": 1, "medium": 1.50},
+    "juice": {"small": 2, "medium": 2.50}
+  },
+  "topping": {
+    "olives": 1,
+    "tomatoes": 1,
+    "mushrooms": 1,
+    "jalapenos": 1,
+    "chicken": 3,
+    "beef": 3,
+    "pepperoni": 3
+  }
+}
