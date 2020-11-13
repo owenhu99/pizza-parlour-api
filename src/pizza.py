@@ -32,16 +32,14 @@ class Pizza(FoodItem):
             return False
 
         if not item_data[1] in self.data['pizza'][item_data[0]]:
-            print('Error: ' + item_data[1] + ' size does not exist for ' 
+            print('Error: ' + item_data[1] + ' size does not exist for '
                     + item_data[0] + ' pizza.')
             return False
 
         for topping in item_data[2]:
             if not topping in self.data['topping']:
-                        print('Error: Pizza topping ' + topping + 
-                                ' does not exist.')
-                        return False
-
+                print('Error: Pizza topping ' + topping + ' does not exist.')
+                return False
         return True
 
     def update(self, pizza_data):
