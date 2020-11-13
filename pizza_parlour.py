@@ -112,22 +112,49 @@ def api_pickup():
         return jsonify({})
     return no_content_found()
 
-@app.route('/v1/orders/delivery', methods=['POST'])
-def api_delivery():
+@app.route('/v1/orders/ubereats', methods=['POST'])
+def api_ubereats_delivery():
     """Change order to be delivered
     json format:
     {
         "order_number": "<system order number>",
         "address": "<address>",
         "details": "<order details>",
-        "delivery_number": "<partner order number>",
-        "platform": "<delivery platform>"
+        "delivery_number": "<partner order number>"
     }
     """
-    keys = ["order_number", "address", "details", "delivery_number", "platform"]
-    if (not request.json) or (not all(key in request.json for key in keys)) \
-    or (request.json["platform"] not in ["foodora", "ubereats", "in-house"]):
+    keys = ["order_number", "address", "details", "delivery_number"]
+    if (not request.json) or (not all(key in request.json for key in keys)):
         return bad_request(400)
+    request.json["platform"] = "ubereats"
+    if orderManager.change_to_delivery(request.json):
+        return jsonify({})
+    return no_content_found()
+
+@app.route('/v1/orders/foodora', methods=['POST'])
+def api_foodora_delivery():
+    """Change order to be delivered via UberEats"""
+    body = request.data.decode("utf-8").splitlines()
+    header = [x.strip() for x in body[0].split(',')]
+    if set(header) != set(["order_number", "address", "details", "delivery_number"]):
+        return bad_request(400)
+    info = [x.strip() for x in body[1].split(',')]
+    delivery_info = {}
+    for i in range(len(header)):
+        delivery_info[header[i]] = info[i]
+    delivery_info["platform"] = "foodora"
+    delivery_info["order_number"] = int(delivery_info["order_number"])
+    if orderManager.change_to_delivery(delivery_info):
+        return jsonify({})
+    return no_content_found()
+
+@app.route('/v1/orders/inhouse', methods=['POST'])
+def api_inhouse_delivery():
+    """Change order to be delivered in-house"""
+    keys = ["order_number", "address", "details", "delivery_number"]
+    if (not request.json) or (not all(key in request.json for key in keys)):
+        return bad_request(400)
+    request.json["platform"] = "inhouse"
     if orderManager.change_to_delivery(request.json):
         return jsonify({})
     return no_content_found()
