@@ -3,7 +3,7 @@ from drink import Drink
 
 class Order:
     'All orders will be defined from this class'
-    
+
     def __init__(self, order_num, pizzas=None, drinks=None):
         self.order_num = order_num
 
@@ -12,7 +12,7 @@ class Order:
 
         if drinks is not None:
             self.update_drinks(drinks)
-        
+
         self.delivery_info = {}
         self.pickup = False
 
@@ -29,13 +29,13 @@ class Order:
         Throws exception if value of option is invalid"""
         self.delivery_info = delivery_json
         self.set_pickup(False)
-        
+
     def update_pizzas(self, pizzas):
         """Replaces the self.pizzas list with a new list from pizzas parameter."""
         self.pizzas = []
         for pizza in pizzas:
             self.add_pizza(pizza)
-      
+
     def add_pizza(self, pizza_info):
         """Creates a pizza object using pizza_info and appends this pizza to the self.pizzas list.
         May throw exception if pizza_info is invalid"""
@@ -49,7 +49,7 @@ class Order:
             self.add_drink(drink)
 
     def add_drink(self, drink_info):
-        """Attempts to create a new drink using drink_info and adds 
+        """Attempts to create a new drink using drink_info and adds
         it to self.drinks. May Throw Exception if drink_info is invalid"""
         drink = Drink(drink_info)
         self.drinks.append(drink)
@@ -74,7 +74,7 @@ class Order:
         for drink in self.drinks:
             price += drink.get_price()
         return price
-    
+
     def get_delivery_info(self):
         """Return delivery_info dictionary"""
         return self.delivery_info

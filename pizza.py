@@ -1,4 +1,3 @@
-import json
 from food_item import FoodItem
 
 class Pizza(FoodItem):
@@ -18,17 +17,17 @@ class Pizza(FoodItem):
             return price
         return self.price
 
-    def set_inputs(self, pizza_data):
+    def set_inputs(self, item_data):
         """Sets the pizza variables to the pizza_data.
         Only call this if you have already checked pizza_data."""
-        self.item_type = pizza_data[0]
-        self.size = pizza_data[1]
-        self.toppings = pizza_data[2]
+        self.item_type = item_data[0]
+        self.size = item_data[1]
+        self.toppings = item_data[2]
 
-    def check_inputs(self, pizza_data):
+    def check_inputs(self, item_data):
         """Returns boolean according to if there exists a valid pizza
         and toppings under the given inputs"""
-        item_type, size, toppings = pizza_data[0], pizza_data[1], pizza_data[2]
+        item_type, size, toppings = item_data[0], item_data[1], item_data[2]
         try:
             self.data['pizza'][item_type]
             try:

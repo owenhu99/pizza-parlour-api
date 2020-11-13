@@ -1,4 +1,3 @@
-import json
 from food_item import FoodItem
 
 class Drink(FoodItem):
@@ -12,27 +11,27 @@ class Drink(FoodItem):
         else:
             return self.price
 
-    def set_inputs(self, drink_data):
-        """Sets the drink variables to the drink_data. 
+    def set_inputs(self, item_data):
+        """Sets the drink variables to the drink_data.
         Only call this if you have already checked drink_data."""
-        self.item_type = drink_data[0]
-        self.size = drink_data[1]
+        self.item_type = item_data[0]
+        self.size = item_data[1]
 
-    def check_inputs(self, drink_data):
+    def check_inputs(self, item_data):
         """Returns boolean according to if there exists a valid drink under the
         given inputs"""
         try:
-            self.data['drink'][drink_data[0]]
+            self.data['drink'][item_data[0]]
         except KeyError:
-            print('type: ' + drink_data[0])
+            print('type: ' + item_data[0])
             print('Error: Drink type does not exist.')
             return False
         try:
-            self.data['drink'][drink_data[0]][drink_data[1]]
+            self.data['drink'][item_data[0]][item_data[1]]
             return True
         except KeyError:
-            print('size: ' + drink_data[1])
-            print('Error: Drink size does not exist for ' + drink_data[1] + '.')
+            print('size: ' + item_data[1])
+            print('Error: Drink size does not exist for ' + item_data[1] + '.')
             return False
 
     def update(self, drink_data):
