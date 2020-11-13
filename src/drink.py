@@ -20,19 +20,16 @@ class Drink(FoodItem):
     def check_inputs(self, item_data):
         """Returns boolean according to if there exists a valid drink under the
         given inputs"""
-        try:
-            self.data['drink'][item_data[0]]
-        except KeyError:
+        if not item_data[0] in self.data['drink']:
             print('type: ' + item_data[0])
             print('Error: Drink type does not exist.')
             return False
-        try:
-            self.data['drink'][item_data[0]][item_data[1]]
-            return True
-        except KeyError:
+        if not item_data[1] in self.data['drink'][item_data[0]]:
             print('size: ' + item_data[1])
             print('Error: Drink size does not exist for ' + item_data[1] + '.')
             return False
+        else:
+            return True
 
     def update(self, drink_data):
         """Updates drink type and/or size according to parameters

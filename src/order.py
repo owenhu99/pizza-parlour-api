@@ -59,7 +59,7 @@ class Order:
         return self.order_num
 
     def get_pizzas(self):
-        """Returns the pizza object for this order"""
+        """Returns the list of pizza objects for this order"""
         return self.pizzas
 
     def get_drinks(self):
