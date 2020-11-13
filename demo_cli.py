@@ -1,7 +1,11 @@
 from pprint import PrettyPrinter
-from cli_helper import CLIHelper as Helper
+from src.cli_helper import CLIHelper as Helper
+
+## Setup prettyprinting tool ##
 
 pp = PrettyPrinter(width=100, compact=True, indent=2)
+
+## Declaring constants ##
 
 VALID_PIZZAS = {"pepperoni", "margherita", "vegetarian", "neapolitan"}
 VALID_TOPPINGS = {"olives", "tomatoes", "mushrooms", "jalapenos", "chicken", "beef",
@@ -10,6 +14,8 @@ VALID_SIZES = {"small", "medium"}
 VALID_DRINKS = {'coke', 'diet coke', 'coke zero', 'pepsi', 'diet pepsi', 'dr pepper',
     'water', 'juice'}
 VALID_ITYPES = {'pizzas', 'drinks', 'toppings'}
+
+## Helper Functions ##
 
 def _print_result(result, request_type):
     print("\n[Request]:")
@@ -77,7 +83,28 @@ def _ask_for_drink():
         print("Please enter a valid size: ", end='')
     return drink, size
 
+def _get_delivery_info():
+    print("Enter an address: ", end='')
+    address = input()
+    while address == "":
+        print("Please enter an address: ", end='')
+        address = input()
+    print("Enter order instructions: ", end='')
+    order_details = input()
+    while order_details == "":
+        print("Please enter order instructions: ", end='')
+        order_details = input()
+    print("Enter a delivery number: ", end='')
+    delivery_number = input()
+    while delivery_number == "":
+        print("Please enter a delivery_number: ", end='')
+        delivery_number = input()
+    return address, order_details, delivery_number
+
+## Command options ##
+
 def create_order():
+    """Create an order, prints API-call data"""
     order = {"pizzas": [], "drinks": []}
     print("-----------------------------------------------")
     while True:
@@ -97,6 +124,7 @@ def create_order():
     _print_result(Helper.send_order(order), "POST")
 
 def read_order():
+    """Get an order, prints API-call data"""
     order_num = None
     print("-----------------------------------------------")
     print("Enter an order number to retrieve (e to exit): ", end='')
@@ -110,6 +138,7 @@ def read_order():
     _print_result(Helper.get_order(order_num), "GET")
 
 def update_order():
+    """Update an order, prints API-call data"""
     order_num, order = None, {"pizzas": [], "drinks": []}
     print("-----------------------------------------------")
     print("Enter an order number to update (e to exit): ", end='')
@@ -135,6 +164,7 @@ def update_order():
     _print_result(Helper.update_order(order, order_num), "PUT")
 
 def delete_order():
+    """Delete an order, prints API-call data"""
     order_num = None
     print("-----------------------------------------------")
     print("Enter an order number to cancel (e to exit): ", end='')
@@ -148,6 +178,7 @@ def delete_order():
     _print_result(Helper.delete_order(order_num), "DELETE")
 
 def pickup_order():
+    """Change an order to pickup, prints API-call data"""
     order_num = None
     print("-----------------------------------------------")
     print("Enter an order number to change to pickup (e to exit)"
@@ -161,25 +192,8 @@ def pickup_order():
         print("Enter a valid number: ", end='')
     _print_result(Helper.pickup_order(int(order_num)), "POST")
 
-def _get_delivery_info():
-    print("Enter an address: ", end='')
-    address = input()
-    while address == "":
-        print("Please enter an address: ", end='')
-        address = input()
-    print("Enter order instructions: ", end='')
-    order_details = input()
-    while order_details == "":
-        print("Please enter order instructions: ", end='')
-        order_details = input()
-    print("Enter a delivery number: ", end='')
-    delivery_number = input()
-    while delivery_number == "":
-        print("Please enter a delivery_number: ", end='')
-        delivery_number = input()
-    return address, order_details, delivery_number
-
 def deliver_inhouse():
+    """Change order to inhouse deliver, prints API-call data"""
     order_num = None
     print("-----------------------------------------------")
     print("Enter an order number to be delivered inhouse (e to exit)"
@@ -201,6 +215,7 @@ def deliver_inhouse():
     _print_result(Helper.deliver_order_json(order, "inhouse"), "POST")
 
 def deliver_ubereats():
+    """Change order to ubereats delivery, prints API-call data"""
     order_num = None
     print("-----------------------------------------------")
     print("Enter an order number to be delivered UberEats (e to exit)"
@@ -222,6 +237,7 @@ def deliver_ubereats():
     _print_result(Helper.deliver_order_json(order, "ubereats"), "POST")
 
 def deliver_foodora():
+    """Change order to foodora delivery, prints API-call data"""
     order_num = None
     print("-----------------------------------------------")
     print("Enter an order number to be delivered Foodora (e to exit)"
@@ -239,9 +255,11 @@ def deliver_foodora():
     _print_result(Helper.deliver_order_csv(order), "POST")
 
 def get_menu():
+    """Get full menu, prints API-call data"""
     _print_result(Helper.get_menu(), "GET")
 
 def get_item():
+    """Get a menu item, prints API-call data"""
     item = {"itype": "", "item": "", "size": ""}
     print("-----------------------------------------------")
     print("Use command 'me' to view menu")
@@ -260,6 +278,7 @@ def get_item():
     _print_result(Helper.get_menu(item), "GET")
 
 def print_commands():
+    """Prints list of commands"""
     print("\n-----------------------------------------------")
     print("------------PIZZA PARLOUR API DEMO-------------")
     print("-----------------------------------------------")
@@ -280,6 +299,7 @@ def print_commands():
     print("it: get a menu item\n")
 
 def get_prompt():
+    """Prints command prompt and run function accordingly"""
     print("> ", end='')
     user_input = input()
     option = options.get(user_input, "err")

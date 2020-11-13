@@ -1,6 +1,8 @@
 import requests
 
-class CLIHelper(object):
+class CLIHelper():
+    """Helper class for demo_cli.py with static methods"""
+
     @staticmethod
     def send_order(order_dict):
         """Take order in dict format and send POST request
@@ -46,10 +48,10 @@ class CLIHelper(object):
             "status_code": request.status_code,
             "response": response
         }
-    
+
     @staticmethod
     def update_order(order_dict, order_number):
-        """Take order in dict format and send POST request
+        """Take order in dict format and send PUT request to update
         Returns dict = {
             "url": api_url,
             "body": request_body,
@@ -95,7 +97,7 @@ class CLIHelper(object):
 
     @staticmethod
     def pickup_order(order_number):
-        """Send DELETE request with order_number
+        """Send POST request with order_number to update to pickup
         Returns dict = {
             "url": api_url,
             "body": request_body,
@@ -116,10 +118,12 @@ class CLIHelper(object):
             "status_code": request.status_code,
             "response": response
         }
-    
+
     @staticmethod
     def deliver_order_json(order_dict, method):
-        """Send DELETE request with order_number
+        """Send POST request with order in json format to change
+        to the specified delivery method
+
         Returns dict = {
             "url": api_url,
             "body": request_body,
@@ -147,7 +151,9 @@ class CLIHelper(object):
 
     @staticmethod
     def deliver_order_csv(order_csv):
-        """Send DELETE request with order_number
+        """Send POST request with order in csv format to change
+        to the specified delivery method
+
         Returns dict = {
             "url": api_url,
             "body": request_body,
@@ -167,7 +173,7 @@ class CLIHelper(object):
             "status_code": request.status_code,
             "response": response
         }
-        
+
     @staticmethod
     def get_menu(item=None):
         """Send GET request for menu
