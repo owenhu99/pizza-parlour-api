@@ -24,6 +24,10 @@ class Order:
         """Change pickup method"""
         self.pickup = pickup
 
+    def get_delivery_info(self):
+        """Return delivery_info dictionary"""
+        return self.delivery_info
+
     def update_delivery_info(self, delivery_json):
         """Update order's delivery option
         Throws exception if value of option is invalid"""
@@ -74,7 +78,3 @@ class Order:
         for drink in self.drinks:
             price += drink.get_price()
         return price
-
-    def get_delivery_info(self):
-        """Return delivery_info dictionary"""
-        return self.delivery_info

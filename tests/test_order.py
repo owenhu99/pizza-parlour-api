@@ -62,9 +62,6 @@ def test_add_pizza():
     assert order.get_pizzas()[2].get_size() == 'small'
     assert order.get_pizzas()[2].get_toppings() == ['beef']
 
-
-
-
 def test_update_pizzas():
     order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
     order.update_pizzas([['vegetarian', 'small', ['beef']]])
@@ -92,6 +89,25 @@ def test_update_drinks():
     assert order.get_drinks()[0].get_size() == 'small'
     assert order.get_drinks()[1].get_type() == 'pepsi'
     assert order.get_drinks()[1].get_size() == 'medium'
+
+def test_update_delivery_info():
+    order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
+    delivery_info = {'address': '200 college street Toronto ON', 'order_details': 'Please meet me downstairs', 'order_number': 15}
+    order.update_delivery_info(delivery_info)
+    assert order.delivery_info is delivery_info
+    assert not order.pickup
+
+    delivery_info = {'address': '300 college street Toronto ON', 'order_details': 'Please meet me outside', 'order_number': 16}
+    order.update_delivery_info(delivery_info)
+    assert order.delivery_info is delivery_info
+    assert not order.pickup
+
+def test_get_delivery_info():
+    order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
+    assert order.get_delivery_info() == {}
+    delivery_info = {'address': '200 college street Toronto ON', 'order_details': 'Please meet me downstairs', 'order_number': 15}
+    order.update_delivery_info(delivery_info)
+    assert order.get_delivery_info() is delivery_info
 
 def test_get_pickup():
     order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
@@ -126,6 +142,11 @@ def test_get_pizzas():
     assert order.get_pizzas()[0].get_size() == 'small'
     assert order.get_pizzas()[0].get_toppings() == ['chicken']
 
+    order.add_pizza(['pepperoni', 'small', ['beef']])
+    assert order.get_pizzas()[1].get_type() == 'pepperoni'
+    assert order.get_pizzas()[1].get_size() == 'small'
+    assert order.get_pizzas()[1].get_toppings() == ['beef']
+
 def test_get_drinks():
     order = Order(1, [['pepperoni', 'medium', ['olives', 'chicken']]], [['pepsi', 'small']])
     assert order.get_drinks()[0].get_type() == 'pepsi'
@@ -137,6 +158,10 @@ def test_get_drinks():
     assert order.get_drinks()[0].get_size() == 'medium'
     assert order.get_drinks()[1].get_type() == 'pepsi'
     assert order.get_drinks()[1].get_size() == 'medium'
+
+    order.add_drink(['coke', 'small'])
+    assert order.get_drinks()[2].get_type() == 'coke'
+    assert order.get_drinks()[2].get_size() == 'small'
 
 def test_get_price():
     with open('data.json') as f:
