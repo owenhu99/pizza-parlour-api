@@ -46,11 +46,23 @@ We implemented the Foodora port to take JSON input for the coding session since 
 
 **Negatives**
 
-- We were more used to coding by ourselves, so pair programming made us a bit self-conscious and thus slowing down the efficiency a bit
+- We were more used to coding by ourselves, so pair programming made us a bit self-conscious and thus slowed down the efficiency a bit
 
 - The navigator was not very useful during long coding sessions, and it's difficult to stay focused watching your partner code
 
 - In a small project, having two people code at the same time may still be faster overall than one person coding while having the benefits of the navigator watching
+
+# Program Design
+
+## Design Patterns
+
+## Relationships Between Objects
+
+- Our code has relatively high cohesion and groups data into objects that would understandably represent them. The food_item classes all are simple and use all of their data well and often. Order and order_manager store the relevant data and have the needed methods to get, set, and check everything.
+
+- The way we set up our code with the order manager keeping track of orders, which hold objects for pizzas and drinks, which then hold their own information all means that the coupling stays low. Data stays where it is held and is only used to be given to the user or stored into an object.
+
+## Function Design
 
 # Code Craftsmanship
 
