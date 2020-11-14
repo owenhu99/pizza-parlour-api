@@ -70,7 +70,7 @@ def api_update_order(order_number):
             order.update_drinks(_parse_dict_to_array(request.json["drinks"]))
         except InvalidInputException:
             return no_content_found()
-    return jsonify({})
+    return api_get_order(order_number)
 
 @app.route('/v1/orders/<int:order_number>', methods=['DELETE'])
 def api_cancel_order(order_number):
