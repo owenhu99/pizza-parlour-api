@@ -33,7 +33,7 @@ The root address is `http://127.0.0.1:5000/`
 
 This route is used to create an order at the pizza parlour. It takes a JSON body with the following format.
 
-``` JSON
+```
 {
 	"pizzas": [
 		{"type": str, "size": str, "toppings": comma-separated-str},
@@ -66,7 +66,7 @@ This route is used to get an order's information. No parameter is needed, the or
 If no order is found with the order number provided, a ***204 NO CONTENT FOUND*** will be returned.
 
 On success, a JSON will be returned in the form of:
-``` JSON
+```
 {
 	"pizzas": [
 		{"type": str, "size": str, "toppings": [topping1, topping2, ...]},
@@ -102,7 +102,7 @@ On success, a JSON `{"cancelled_order": order_number}` will be returned with the
 
 This route is used to update an order at the pizza parlour. The order number is provided as part of the URL in place of <order_number>. It takes a JSON body with the following format:
 
-``` JSON
+```
 {
 	"pizzas": [
 		{"type": str, "size": str, "toppings": comma-separated-str},
@@ -143,7 +143,7 @@ On success, a `GET /v1/orders/<order_number>` request is called and the response
 ### *POST* /v1/orders/ubereats or /v1/orders/inhouse
 
 This route is used to change an existing order to be delivered via UberEats or in-house, respectively. It takes a JSON body with the following format:
-``` JSON
+```
 "delivery_info": {
 	"order_number": int,
 	"address": str,
@@ -167,7 +167,7 @@ On success, a `GET /v1/orders/<order_number>` request is called and the response
 This route is used to change an existing order to be delivered via Foodora. It takes a text body that is in a CSV format with the headers `order_number,address,details,delivery_number`.
 
 Only the first line of values after the headers is parsed, since each header is only supposed to correspond to one value. For example, `order_number,address,details,delivery_number\n1,321 Bloor St. W.,no green onions,foodora13` will be parsed into a JSON:
-``` JSON
+```
 "delivery_info": {
 	"order_number": 1,
 	"address": "321 Bloor St. W.",
