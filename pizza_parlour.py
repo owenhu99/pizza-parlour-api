@@ -109,7 +109,7 @@ def api_pickup():
     if not request.json or "order_number" not in request.json:
         return bad_request(400)
     if orderManager.change_to_pickup(request.json["order_number"]):
-        return jsonify({})
+        return api_get_order(request.json["order_number"])
     return no_content_found()
 
 @app.route('/v1/orders/ubereats', methods=['POST'])
@@ -128,7 +128,7 @@ def api_ubereats_delivery():
         return bad_request(400)
     request.json["platform"] = "ubereats"
     if orderManager.change_to_delivery(request.json):
-        return jsonify({})
+        return api_get_order(request.json["order_number"])
     return no_content_found()
 
 @app.route('/v1/orders/foodora', methods=['POST'])
@@ -145,7 +145,7 @@ def api_foodora_delivery():
     delivery_info["platform"] = "foodora"
     delivery_info["order_number"] = int(delivery_info["order_number"])
     if orderManager.change_to_delivery(delivery_info):
-        return jsonify({})
+        return api_get_order(delivery_info["order_number"])
     return no_content_found()
 
 @app.route('/v1/orders/inhouse', methods=['POST'])
@@ -156,7 +156,7 @@ def api_inhouse_delivery():
         return bad_request(400)
     request.json["platform"] = "inhouse"
     if orderManager.change_to_delivery(request.json):
-        return jsonify({})
+        return api_get_order(request.json["order_number"])
     return no_content_found()
 
 @app.route('/v1/resources/menu/all', methods=['GET'])
