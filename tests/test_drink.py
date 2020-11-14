@@ -1,4 +1,4 @@
-from drink import Drink
+from src.drink import Drink
 import random
 import os.path
 import json

@@ -1,4 +1,4 @@
-from food_item import FoodItem
+from src.food_item import FoodItem
 
 class Pizza(FoodItem):
     'Pizzas and their relevant data are defined here'
@@ -27,24 +27,20 @@ class Pizza(FoodItem):
     def check_inputs(self, item_data):
         """Returns boolean according to if there exists a valid pizza
         and toppings under the given inputs"""
-        item_type, size, toppings = item_data[0], item_data[1], item_data[2]
-        try:
-            self.data['pizza'][item_type]
-            try:
-                self.data['pizza'][item_type][size]
-                for topping in toppings:
-                    try:
-                        self.data['topping'][topping]
-                    except KeyError:
-                        print('Error: Pizza topping ' + topping + ' does not exist.')
-                        return False
-                return True
-            except KeyError:
-                print('Error: ' + size + ' size does not exist for ' + item_type + ' pizza.')
-                return False
-        except KeyError:
-            print('Error: ' + item_type + ' pizza does not exist.')
+        if not item_data[0] in self.data['pizza']:
+            print('Error: ' + item_data[0] + ' pizza does not exist.')
             return False
+
+        if not item_data[1] in self.data['pizza'][item_data[0]]:
+            print('Error: ' + item_data[1] + ' size does not exist for '
+                    + item_data[0] + ' pizza.')
+            return False
+
+        for topping in item_data[2]:
+            if not topping in self.data['topping']:
+                print('Error: Pizza topping ' + topping + ' does not exist.')
+                return False
+        return True
 
     def update(self, pizza_data):
         """Updates pizza values according to pizza_data and checks validity"""

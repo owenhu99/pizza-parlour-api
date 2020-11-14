@@ -1,5 +1,5 @@
-from pizza import Pizza
-from drink import Drink
+from src.pizza import Pizza
+from src.drink import Drink
 
 class Order:
     'All orders will be defined from this class'
@@ -23,6 +23,10 @@ class Order:
     def set_pickup(self, pickup):
         """Change pickup method"""
         self.pickup = pickup
+
+    def get_delivery_info(self):
+        """Return delivery_info dictionary"""
+        return self.delivery_info
 
     def update_delivery_info(self, delivery_json):
         """Update order's delivery option
@@ -59,7 +63,7 @@ class Order:
         return self.order_num
 
     def get_pizzas(self):
-        """Returns the pizza object for this order"""
+        """Returns the list of pizza objects for this order"""
         return self.pizzas
 
     def get_drinks(self):
@@ -74,7 +78,3 @@ class Order:
         for drink in self.drinks:
             price += drink.get_price()
         return price
-
-    def get_delivery_info(self):
-        """Return delivery_info dictionary"""
-        return self.delivery_info

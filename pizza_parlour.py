@@ -1,6 +1,7 @@
 import json
 from flask import Flask, request, jsonify
-from order_manager import OrderManager
+from src.order_manager import OrderManager
+from src.custom_exception import InvalidInputException
 
 app = Flask("Assignment 2")
 orderManager = OrderManager()
@@ -60,10 +61,16 @@ def api_update_order(order_number):
     if not request.json or ("pizzas" not in request.json and "drinks" not in request.json):
         return bad_request(400)
     if "pizzas" in request.json:
-        order.update_pizzas(_parse_dict_to_array(request.json["pizzas"]))
+        try:
+            order.update_pizzas(_parse_dict_to_array(request.json["pizzas"]))
+        except InvalidInputException:
+            return no_content_found()
     if "drinks" in request.json:
-        order.update_drinks(_parse_dict_to_array(request.json["drinks"]))
-    return jsonify({})
+        try:
+            order.update_drinks(_parse_dict_to_array(request.json["drinks"]))
+        except InvalidInputException:
+            return no_content_found()
+    return api_get_order(order_number)
 
 @app.route('/v1/orders/<int:order_number>', methods=['DELETE'])
 def api_cancel_order(order_number):
@@ -95,7 +102,10 @@ def api_create_order():
     drinks = _parse_dict_to_array(request.json["drinks"])
     if KeyError in (pizzas, drinks):
         return bad_request(400)
-    order_num = orderManager.order(pizzas, drinks)
+    try:
+        order_num = orderManager.order(pizzas, drinks)
+    except InvalidInputException:
+        return no_content_found()
     return jsonify({'order_number': order_num})
 
 @app.route('/v1/orders/pickup', methods=['POST'])
@@ -109,27 +119,54 @@ def api_pickup():
     if not request.json or "order_number" not in request.json:
         return bad_request(400)
     if orderManager.change_to_pickup(request.json["order_number"]):
-        return jsonify({})
+        return api_get_order(request.json["order_number"])
     return no_content_found()
 
-@app.route('/v1/orders/delivery', methods=['POST'])
-def api_delivery():
+@app.route('/v1/orders/ubereats', methods=['POST'])
+def api_ubereats_delivery():
     """Change order to be delivered
     json format:
     {
         "order_number": "<system order number>",
         "address": "<address>",
         "details": "<order details>",
-        "delivery_number": "<partner order number>",
-        "platform": "<delivery platform>"
+        "delivery_number": "<partner order number>"
     }
     """
-    keys = ["order_number", "address", "details", "delivery_number", "platform"]
-    if (not request.json) or (not all(key in request.json for key in keys)) \
-    or (request.json["platform"] not in ["foodora", "ubereats", "in-house"]):
+    keys = ["order_number", "address", "details", "delivery_number"]
+    if (not request.json) or (not all(key in request.json for key in keys)):
         return bad_request(400)
+    request.json["platform"] = "ubereats"
     if orderManager.change_to_delivery(request.json):
-        return jsonify({})
+        return api_get_order(request.json["order_number"])
+    return no_content_found()
+
+@app.route('/v1/orders/foodora', methods=['POST'])
+def api_foodora_delivery():
+    """Change order to be delivered via UberEats"""
+    body = request.data.decode("utf-8").splitlines()
+    header = [x.strip() for x in body[0].split(',')]
+    if set(header) != set(["order_number", "address", "details", "delivery_number"]):
+        return bad_request(400)
+    info = [x.strip() for x in body[1].split(',')]
+    delivery_info = {}
+    for i in range(len(header)):
+        delivery_info[header[i]] = info[i]
+    delivery_info["platform"] = "foodora"
+    delivery_info["order_number"] = int(delivery_info["order_number"])
+    if orderManager.change_to_delivery(delivery_info):
+        return api_get_order(delivery_info["order_number"])
+    return no_content_found()
+
+@app.route('/v1/orders/inhouse', methods=['POST'])
+def api_inhouse_delivery():
+    """Change order to be delivered in-house"""
+    keys = ["order_number", "address", "details", "delivery_number"]
+    if (not request.json) or (not all(key in request.json for key in keys)):
+        return bad_request(400)
+    request.json["platform"] = "inhouse"
+    if orderManager.change_to_delivery(request.json):
+        return api_get_order(request.json["order_number"])
     return no_content_found()
 
 @app.route('/v1/resources/menu/all', methods=['GET'])

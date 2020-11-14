@@ -1,4 +1,4 @@
-from food_item import FoodItem
+from src.food_item import FoodItem
 
 class Drink(FoodItem):
     'Drinks and their relevant data are defined here'
@@ -8,8 +8,7 @@ class Drink(FoodItem):
         is not initialized"""
         if self.price is None:
             return self.data['drink'][self.item_type][self.size]
-        else:
-            return self.price
+        return self.price
 
     def set_inputs(self, item_data):
         """Sets the drink variables to the drink_data.
@@ -20,19 +19,15 @@ class Drink(FoodItem):
     def check_inputs(self, item_data):
         """Returns boolean according to if there exists a valid drink under the
         given inputs"""
-        try:
-            self.data['drink'][item_data[0]]
-        except KeyError:
+        if not item_data[0] in self.data['drink']:
             print('type: ' + item_data[0])
             print('Error: Drink type does not exist.')
             return False
-        try:
-            self.data['drink'][item_data[0]][item_data[1]]
-            return True
-        except KeyError:
+        if not item_data[1] in self.data['drink'][item_data[0]]:
             print('size: ' + item_data[1])
             print('Error: Drink size does not exist for ' + item_data[1] + '.')
             return False
+        return True
 
     def update(self, drink_data):
         """Updates drink type and/or size according to parameters
