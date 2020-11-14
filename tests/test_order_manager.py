@@ -36,6 +36,7 @@ def test_cancel_order():
     assert manager.get_num_active_orders() == 1
     manager.cancel_order(order_num)
     assert manager.get_num_active_orders() == 0
+    assert manager.cancel_order(order_num) == False
 
 def test_change_to_delivery():
     manager = OrderManager()
