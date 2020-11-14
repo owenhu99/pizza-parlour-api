@@ -1,5 +1,6 @@
 import json
 import abc
+from src.custom_exception import InvalidInputException
 
 class FoodItem:
     'Food items (pizzas and drinks) and their relevant data are defined here'
@@ -15,7 +16,7 @@ class FoodItem:
             self.set_inputs(item_data)
             self.price = self.get_price()
         else:
-            raise Exception('Error: Invalid attributes')
+            raise InvalidInputException('Error: Invalid attributes')
 
     def get_size(self):
         'Returns the food item size'

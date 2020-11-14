@@ -1,6 +1,7 @@
 import json
 from flask import Flask, request, jsonify
 from src.order_manager import OrderManager
+from src.custom_exception import InvalidInputException
 
 app = Flask("Assignment 2")
 orderManager = OrderManager()
@@ -60,9 +61,15 @@ def api_update_order(order_number):
     if not request.json or ("pizzas" not in request.json and "drinks" not in request.json):
         return bad_request(400)
     if "pizzas" in request.json:
-        order.update_pizzas(_parse_dict_to_array(request.json["pizzas"]))
+        try:
+            order.update_pizzas(_parse_dict_to_array(request.json["pizzas"]))
+        except InvalidInputException:
+            return no_content_found()
     if "drinks" in request.json:
-        order.update_drinks(_parse_dict_to_array(request.json["drinks"]))
+        try:
+            order.update_drinks(_parse_dict_to_array(request.json["drinks"]))
+        except InvalidInputException:
+            return no_content_found()
     return jsonify({})
 
 @app.route('/v1/orders/<int:order_number>', methods=['DELETE'])
@@ -95,7 +102,10 @@ def api_create_order():
     drinks = _parse_dict_to_array(request.json["drinks"])
     if KeyError in (pizzas, drinks):
         return bad_request(400)
-    order_num = orderManager.order(pizzas, drinks)
+    try:
+        order_num = orderManager.order(pizzas, drinks)
+    except InvalidInputException:
+        return no_content_found()
     return jsonify({'order_number': order_num})
 
 @app.route('/v1/orders/pickup', methods=['POST'])
